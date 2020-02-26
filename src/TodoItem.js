@@ -5,10 +5,15 @@ export default class todoItem extends Component {
     render() {
         return (
             <li>
-                <p>{this.props.todo.task} | {JSON.stringify(this.props.todo.complete)}</p>
-                { console.log('complete?', this.props.todo.complete)} 
-                <Link to={`/edit/${this.props.todo.id}`}>EDIT</Link>
-                {/* <a onClick={this.props.handleDelete}>DELETE</a> */}
+                <p>
+                    {this.props.todo.task}
+                    &nbsp;|&nbsp; 
+                    {JSON.stringify(this.props.todo.complete)}
+                    &nbsp;&nbsp; 
+                    <Link to={`/edit/${this.props.todo.id}`}><button>EDIT</button></Link>
+                    &nbsp;&nbsp; 
+                    <button onClick={this.props.handleDelete}>DELETE</button>
+                </p>
             </li>
         )
     }

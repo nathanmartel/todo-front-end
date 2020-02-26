@@ -5,12 +5,42 @@ import TodoItem from './TodoItem.js';
 export default class Home extends Component {
   state = {
     todos: [],
+    addValue: '',
   }
 
-  async componentDidMount() {
+  handleDelete = async (idFromChild) => {
+    // const URL = `http://localhost:3000/api/todos/${idFromChild}`;
+    // const todoData = await request.delete(URL);
+    // this.setState({ todos: todoData.body });
+    this.getAllTodos();
+  }
+
+  handleAddSubmit = async (e) => {
+    e.preventDefault();
+    const newTodo = {
+      id: Math.random(),
+      task: this.state.addValue,
+      complete: false,
+    }
+    const URL = `http://localhost:3000/api/todos`;
+    const result = await request.post(URL, newTodo);
+    console.log('Adding POST result:', result);
+    // Is this the best way to refresh the list of todos?
+    this.getAllTodos();
+  }
+
+  handleAddChange = (e) => {
+    this.setState({ addValue : e.target.value });
+  }
+
+  getAllTodos = async () => {
     const URL = `http://localhost:3000/api/todos`;
     const todoData = await request.get(URL);
     this.setState({ todos: todoData.body });
+  }
+
+  async componentDidMount() {
+    this.getAllTodos();
   }
 
   render() {
@@ -21,8 +51,14 @@ export default class Home extends Component {
         </header>
         <div>
           <ul className='todo-list'>
-            {this.state.todos.map(todo => <TodoItem todo={todo} />)}
+            {this.state.todos.map(todo => <TodoItem todo={todo} handleDelete={this.handleDelete} />)}
           </ul>
+        </div>
+        <div>
+          <form onSubmit={this.handleAddSubmit}>
+            <input onChange={this.handleAddChange} value={this.state.addValue} />
+            <button type="submit">Add</button>
+          </form>
         </div>
       </div>
     )
