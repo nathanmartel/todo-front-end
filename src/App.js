@@ -13,12 +13,12 @@ export default class App extends React.Component {
   return (
     <Router>
       <Switch>
+        <Route exact path='/login' component={Login} />
         <Route path='/' render={() => 
                 isLoggedIn() 
                     ? <Home />
                     : <Redirect to='/login' />
                 }/>
-        <Route exact path='/login' component={Login} />
         {/* Another time, edit! */}
         {/* <Route exact path='/edit/:id' component={TodoEdit} /> */}
         {/* <Redirect to='/login' /> */}
