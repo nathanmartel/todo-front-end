@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export default class todoItem extends Component {
     render() {
         return (
-            <li>
+            <li key={this.props.todo.id}>
                 <p>
                     {this.props.todo.task}
                     &nbsp;|&nbsp; 

@@ -30,7 +30,13 @@ export default class Login extends Component {
         }
         const result = await request.post(URL, newUser);
         console.log(result);
+        localStorage.setItem('user', JSON.stringify(result.body));
     }
+
+    handleLogout = () => {
+        localStorage.clear();
+    }
+
     
     render() {
         return (
@@ -45,6 +51,9 @@ export default class Login extends Component {
                     <input onChange={(e) => this.setState({ emailLogin: e.target.value })} value={this.state.emailLogin} />
                     <input onChange={(e) => this.setState({ passwordLogin: e.target.value })} value={this.state.passwordLogin} />
                     <button onClick={this.handleLogin}>Login</button>
+                </div>
+                <div>
+                <button onClick={this.handleLogout}>Logout</button>
                 </div>
             </div>
         )

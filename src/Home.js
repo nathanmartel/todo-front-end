@@ -9,7 +9,7 @@ export default class Home extends Component {
   }
 
   handleDelete = async (idFromChild) => {
-    // const URL = `http://localhost:3000/api/todos/${idFromChild}`;
+    // const URL = `${process.env.REACT_APP_DB_URL}/api/todos/${idFromChild}`;
     // const todoData = await request.delete(URL);
     // this.setState({ todos: todoData.body });
     this.getAllTodos();
@@ -22,7 +22,7 @@ export default class Home extends Component {
       task: this.state.addValue,
       complete: false,
     }
-    const URL = `http://localhost:3000/api/todos`;
+    const URL = `${process.env.REACT_APP_DB_URL}/api/todos`;
     const result = await request.post(URL, newTodo);
     console.log('Adding POST result:', result);
     // Is this the best way to refresh the list of todos?
@@ -34,8 +34,10 @@ export default class Home extends Component {
   }
 
   getAllTodos = async () => {
-    const URL = `http://localhost:3000/api/todos`;
-    const todoData = await request.get(URL);
+    const URL = `${process.env.REACT_APP_DB_URL}/api/todos`;
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log(user.name);
+    const todoData = await request.get(URL).set('Authorization', user.token);
     this.setState({ todos: todoData.body });
   }
 
