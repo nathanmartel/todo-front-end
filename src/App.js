@@ -4,6 +4,7 @@ import Home from './Home.js';
 import Login from './Login.js';
 import TodoEdit from './TodoEdit.js';
 import './App.css';
+import './style.css';
 
 const isLoggedIn = () => JSON.parse(localStorage.getItem('user'));
 
@@ -15,11 +16,12 @@ export default class App extends React.Component {
         <Route exact path='/' render={() => 
                 isLoggedIn() 
                     ? <Home />
-                    : <Redirect to='login' />
+                    : <Redirect to='/login' />
                 }/>
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/edit/:id" component={TodoEdit} />
-        {/* <Route path="/?" component={Home} /> */}
+        <Route exact path='/login' component={Login} />
+        {/* Another time, edit! */}
+        {/* <Route exact path='/edit/:id' component={TodoEdit} /> */}
+        <Redirect to='/login' />
       </Switch>
     </Router>
   );

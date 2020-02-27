@@ -6,13 +6,30 @@ export default class Home extends Component {
   state = {
     todos: [],
     addValue: '',
+    userName: '', 
+    userToken: '',
+    userId: '' 
+}
+
+  handleComplete = async (todo) => {
+    console.log('marking as complete (or incomplete)');
+    const updatedTodo = {
+      id: todo.id,
+      task: todo.task,
+      user_id: todo.user_id,
+      complete: !todo.complete,
+    }
+    const URL = `${process.env.REACT_APP_DB_URL}/api/todos/${todo.id}`;
+    const result = await request.put(URL, updatedTodo).set('Authorization', this.state.userToken);
+    console.log('Adding PUT result:', result);
   }
 
   handleDelete = async (idFromChild) => {
+    console.log('should delete', idFromChild);
     // const URL = `${process.env.REACT_APP_DB_URL}/api/todos/${idFromChild}`;
     // const todoData = await request.delete(URL);
     // this.setState({ todos: todoData.body });
-    this.getAllTodos();
+    // this.getAllTodos();
   }
 
   handleAddSubmit = async (e) => {
@@ -20,13 +37,12 @@ export default class Home extends Component {
     const newTodo = {
       id: Math.random(),
       task: this.state.addValue,
+      user_id: this.state.userId,
       complete: false,
     }
     const URL = `${process.env.REACT_APP_DB_URL}/api/todos`;
-    const result = await request.post(URL, newTodo);
+    const result = await request.post(URL, newTodo).set('Authorization', this.state.userToken);;
     console.log('Adding POST result:', result);
-    // Is this the best way to refresh the list of todos?
-    this.getAllTodos();
   }
 
   handleAddChange = (e) => {
@@ -34,11 +50,28 @@ export default class Home extends Component {
   }
 
   getAllTodos = async () => {
-    const URL = `${process.env.REACT_APP_DB_URL}/api/todos`;
+    console.log('Getting all todos');
     const user = JSON.parse(localStorage.getItem('user'));
-    console.log(user.name);
-    const todoData = await request.get(URL).set('Authorization', user.token);
+    console.log('userToken is ', this.state.userToken);
+    console.log('user.token is ', user.token);
+    const URL = `${process.env.REACT_APP_DB_URL}/api/todos`;
+    const todoData = await request.get(URL).set('Authorization', this.state.userToken);
     this.setState({ todos: todoData.body });
+  }
+
+  getUser = () => {
+    console.log('Getting user');
+    const user = JSON.parse(localStorage.getItem('user'));
+    this.setState({ 
+      userName: user.display_name, 
+      userToken: user.token,
+      userId: user.id 
+    });
+  }
+
+  // Make sure user info is loaded into state for authorization use before making API calls
+  componentWillMount() {
+    this.getUser();
   }
 
   async componentDidMount() {
@@ -53,7 +86,7 @@ export default class Home extends Component {
         </header>
         <div>
           <ul className='todo-list'>
-            {this.state.todos.map(todo => <TodoItem todo={todo} handleDelete={this.handleDelete} />)}
+            {this.state.todos.map(todo => <TodoItem key={todo.id} todo={todo} handleComplete={this.handleComplete} handleDelete={this.handleDelete} />)}
           </ul>
         </div>
         <div>
