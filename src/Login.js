@@ -20,6 +20,7 @@ export default class Login extends Component {
         }
         const result = await request.post(URL, newUser);
         console.log(result);
+        window.location = ('/');
     }
     
     handleLogin = async () => {
@@ -31,10 +32,12 @@ export default class Login extends Component {
         const result = await request.post(URL, newUser);
         console.log(result);
         localStorage.setItem('user', JSON.stringify(result.body));
+        window.location = ('/');
     }
 
     handleLogout = () => {
         localStorage.clear();
+        window.location = ('/');
     }
 
     
