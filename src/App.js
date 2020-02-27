@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect, Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import Home from './Home.js';
 import Login from './Login.js';
-import TodoEdit from './TodoEdit.js';
+// import TodoEdit from './TodoEdit.js';
 import './App.css';
 import './style.css';
 
@@ -13,7 +13,7 @@ export default class App extends React.Component {
   return (
     <Router>
       <Switch>
-        <Route exact path='/' render={() => 
+        <Route path='/' render={() => 
                 isLoggedIn() 
                     ? <Home />
                     : <Redirect to='/login' />
@@ -21,7 +21,7 @@ export default class App extends React.Component {
         <Route exact path='/login' component={Login} />
         {/* Another time, edit! */}
         {/* <Route exact path='/edit/:id' component={TodoEdit} /> */}
-        <Redirect to='/login' />
+        {/* <Redirect to='/login' /> */}
       </Switch>
     </Router>
   );

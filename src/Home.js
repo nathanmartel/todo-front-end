@@ -19,17 +19,17 @@ export default class Home extends Component {
       user_id: todo.user_id,
       complete: !todo.complete,
     }
-    const URL = `${process.env.REACT_APP_DB_URL}/api/todos/${todo.id}`;
+    const URL = `${process.env.REACT_APP_DB_URL}/${todo.id}`;
     const result = await request.put(URL, updatedTodo).set('Authorization', this.state.userToken);
     console.log('Adding PUT result:', result);
+    this.getAllTodos();
   }
 
   handleDelete = async (idFromChild) => {
     console.log('should delete', idFromChild);
-    // const URL = `${process.env.REACT_APP_DB_URL}/api/todos/${idFromChild}`;
-    // const todoData = await request.delete(URL);
-    // this.setState({ todos: todoData.body });
-    // this.getAllTodos();
+    const URL = `${process.env.REACT_APP_DB_URL}/${idFromChild}`;
+    const todoData = await request.delete(URL).set('Authorization', this.state.userToken);;
+    this.getAllTodos();
   }
 
   handleAddSubmit = async (e) => {
@@ -40,9 +40,10 @@ export default class Home extends Component {
       user_id: this.state.userId,
       complete: false,
     }
-    const URL = `${process.env.REACT_APP_DB_URL}/api/todos`;
+    const URL = `${process.env.REACT_APP_DB_URL}`;
     const result = await request.post(URL, newTodo).set('Authorization', this.state.userToken);;
     console.log('Adding POST result:', result);
+    this.getAllTodos();
   }
 
   handleAddChange = (e) => {
@@ -51,10 +52,8 @@ export default class Home extends Component {
 
   getAllTodos = async () => {
     console.log('Getting all todos');
-    const user = JSON.parse(localStorage.getItem('user'));
     console.log('userToken is ', this.state.userToken);
-    console.log('user.token is ', user.token);
-    const URL = `${process.env.REACT_APP_DB_URL}/api/todos`;
+    const URL = `${process.env.REACT_APP_DB_URL}`;
     const todoData = await request.get(URL).set('Authorization', this.state.userToken);
     this.setState({ todos: todoData.body });
   }
